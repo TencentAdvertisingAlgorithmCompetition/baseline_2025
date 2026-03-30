@@ -1,4 +1,4 @@
-[中文版](README_CN.md) | English
+[中文](README_CN.md) | English
 
 # 2025 Tencent Ads Algorithm Competition Baseline
 
