@@ -1,13 +1,21 @@
-# 2025 年腾讯广告算法大赛开源Baseline使用说明
+[中文版](README_CN.md) | English
 
-## 1. 简介
+# 2025 Tencent Ads Algorithm Competition Baseline
 
-本项目是2025年腾讯广告算法大赛的开源Baseline，架构基于SASRec，使用Transformer结构建模用户的历史行为序列。该Baseline旨在为参赛者提供一个高效、易用的起点，帮助选手快速上手并进行模型开发和优化。
+## 1. Introduction
 
-## 2. 目录结构
+This project is the Baseline for the 2025 Tencent Ads Algorithm Competition. It is built on the SASRec architecture, using a Transformer structure to model users' historical behavior sequences. This Baseline aims to provide participants with an efficient and easy-to-use starting point to quickly get started with model development and optimization.
+
+## 2. Directory Structure
 
 ``` 
 ├── README.md
+├── faiss-based-ann
+|   ├── resources
+|   │   ├── embedding.fbin
+|   │   └── id.u64bin
+│   ├── main.cc
+│   └── CMakeLists.txt
 ├── dataset.py
 ├── main.py
 ├── model.py
@@ -17,21 +25,21 @@
 └── requirements.txt
 ```
 
-## 3. 安装依赖
+## 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 4. 使用方法
+## 4. Usage
 
-### 4.1 模型训练
+### 4.1 Model Training
 
-在 `main.py` 中自行配置:
+Configure the following in `main.py`:
 
 ``` python
 run_id = "Your_run_id"
-# 都是文件夹名
+# All are directory names
 os.environ["TRAIN_LOG_PATH"] = "Your_train_log_path"
 os.environ["TRAIN_TF_EVENTS_PATH"] = "Your_train_tf_events_path"
 os.environ["TRAIN_CKPT_PATH"] = "Your_train_ckpt_path"
@@ -39,43 +47,43 @@ os.environ["TRAIN_CKPT_PATH"] = "Your_train_ckpt_path"
 os.environ["TRAIN_DATA_PATH"] = "Your_train_data_path" 
 ```
 
-训练命令:
+Training command:
 
 ``` bash
 python main.py
 ```
 
-### 4.2 模型推理
+### 4.2 Model Inference
 
-注意，在推理之前，需要自行配置 `faiss` 以支持向量检索，一种可能的配置(在 `conda` 环境下)：
+Note: Before inference, you need to configure `faiss` for vector retrieval. A possible setup (under a `conda` environment):
 
-- 安装 `faiss`:
-    - 通过conda安装已经编译好的so库文件和头文件，参考：https://github.com/facebookresearch/faiss/blob/v1.9.0/INSTALL.md#step-1-invoking-cmake
+- Install `faiss`:
+    - Install pre-compiled shared libraries and headers via conda. Reference: https://github.com/facebookresearch/faiss/blob/v1.9.0/INSTALL.md#step-1-invoking-cmake
 
     ``` bash
         # CPU-only version
         conda install -c pytorch faiss-cpu
     ```
 
-- 安装 `gflags`:
+- Install `gflags`:
     ``` bash
         conda install anaconda::gflags
     ```
 
-- 构建检索应用程序
+- Build the retrieval application:
     ``` bash
         cd faiss-based-ann
         mkdir build & cd build
-        #如果CONDA_PREFIX变量没有值，这一步会报错;
+        # This step will fail if the CONDA_PREFIX variable is not set
         cmake ..
         make
     ```
-    该脚本运行后，会在faiss-based-ann目录下生成一个faiss_demo的可执行文件
+    After running the script, a `faiss_demo` executable will be generated in the `faiss-based-ann` directory.
 
-在 `eval.py` 中自行配置:
+Configure the following in `eval.py`:
 
 ``` python
-# 都是文件夹名
+# All are directory names
 os.environ['EVAL_RESULT_PATH'] = 'Your_eval_result_path'
 
 os.environ['EVAL_DATA_PATH'] = 'Your_eval_data_path' 
@@ -83,13 +91,13 @@ os.environ['EVAL_DATA_PATH'] = 'Your_eval_data_path'
 os.environ["MODEL_OUTPUT_PATH"] = "Your_model_output_path"
 ```
 
-推理命令:
+Inference command:
 
 ``` bash
 python eval.py
 ```
 
 
-### 4.4 可能拓展
+### 4.4 Possible Extensions
 
-`model_rqvae.py` 是一个基于RQ-VAE的模型实现，参赛者可以根据需要选择使用该模型基于比赛提供的 Multimodal-Embedding 训练 Semantic ID。
+`model_rqvae.py` is a model implementation based on RQ-VAE. Participants can choose to use this model to train Semantic IDs based on the Multimodal-Embedding provided in the competition.
