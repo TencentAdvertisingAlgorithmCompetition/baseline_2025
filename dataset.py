@@ -251,7 +251,7 @@ class MyDataset(torch.utils.data.Dataset):
             t: 不在序列s中的随机整数
         """
         
-        t = x(l, r)
+        t = np.random.randint(l, r)
         
         # cnt = 0
         while t in s or str(t) not in self.item_feat_dict:
